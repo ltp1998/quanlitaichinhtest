@@ -9,7 +9,7 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
     <!-- Layout config Js -->
-    <script src="assets/js/layout.js"></script>
+    <script defer src="assets/js/layout.js"></script>
     <!-- Bootstrap Css -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -20,6 +20,12 @@
     <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
     <!-- Supabase Client -->
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Toastify for better error notifications -->
+    <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+    <!-- Choices.js and Flatpickr via CDN to fix 404 -->
+    <script defer src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
     <!-- auth-page wrapper -->
@@ -66,7 +72,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4">
                                         <div>
-                                            <h5 class="text-primary">Chào mừng 5!</h5>
+                                            <h5 class="text-primary">Chào mừng!</h5>
                                             <p class="text-muted">Đăng nhập để truy cập tài chính của bạn</p>
                                         </div>
                                         <div class="mt-4">
@@ -142,20 +148,20 @@
     </div>
     <!-- end auth-page-wrapper -->
     <!-- JAVASCRIPT -->
-    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/libs/simplebar/simplebar.min.js"></script>
-    <script src="assets/libs/node-waves/waves.min.js"></script>
-    <script src="assets/libs/feather-icons/feather.min.js"></script>
-    <script src="assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
-    <script src="assets/js/plugins.js"></script>
-    <script src="assets/js/pages/password-addon.init.js"></script>
+    <script defer src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script defer src="assets/libs/simplebar/simplebar.min.js"></script>
+    <script defer src="assets/libs/node-waves/waves.min.js"></script>
+    <script defer src="assets/libs/feather-icons/feather.min.js"></script>
+    <script defer src="assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
+    <script defer src="assets/js/plugins.js"></script>
+    <script defer src="assets/js/pages/password-addon.init.js"></script>
     <script>
         // Đảm bảo Supabase client tải xong trước khi chạy
         document.addEventListener('DOMContentLoaded', () => {
             // Khởi tạo Supabase client
             const supabaseUrl = 'https://ejmfnprjqllamousmrim.supabase.co'; // Thay bằng Project URL
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'; // Thay bằng anon key
-            const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
             // Hàm kiểm tra trạng thái người dùng
             async function checkUser() {
@@ -163,6 +169,14 @@
                 if (error) {
                     console.error('Lỗi kiểm tra người dùng:', error.message);
                     document.getElementById('error-message').textContent = 'Lỗi kiểm tra người dùng: ' + error.message;
+                    Toastify({
+                        text: 'Lỗi kiểm tra người dùng: ' + error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
                     return null;
                 }
                 console.log('Thông tin người dùng:', user);
@@ -188,9 +202,24 @@
                 if (error) {
                     errorMessage.textContent = 'Lỗi đăng nhập: ' + error.message;
                     console.error('Lỗi đăng nhập:', error);
+                    Toastify({
+                        text: 'Lỗi đăng nhập: ' + error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
                 } else {
                     console.log('Đăng nhập thành công:', data.user);
-                    alert('Đăng nhập thành công! User: ' + JSON.stringify(data.user, null, 2));
+                    Toastify({
+                        text: 'Đăng nhập thành công! Email: ' + data.user.email,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#28a745",
+                    }).showToast();
                     // Kiểm tra thông tin người dùng
                     const user = await checkUser();
                     if (user) {
@@ -207,6 +236,14 @@
                 if (error) {
                     document.getElementById('error-message').textContent = 'Lỗi đăng nhập Google: ' + error.message;
                     console.error('Lỗi đăng nhập Google:', error);
+                    Toastify({
+                        text: 'Lỗi đăng nhập Google: ' + error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
                 } else {
                     console.log('Đăng nhập Google thành công:', data);
                     await checkUser();
@@ -221,6 +258,14 @@
                 if (error) {
                     document.getElementById('error-message').textContent = 'Lỗi đăng nhập Facebook: ' + error.message;
                     console.error('Lỗi đăng nhập Facebook:', error);
+                    Toastify({
+                        text: 'Lỗi đăng nhập Facebook: ' + error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
                 } else {
                     console.log('Đăng nhập Facebook thành công:', data);
                     await checkUser();
@@ -235,6 +280,14 @@
                 if (error) {
                     document.getElementById('error-message').textContent = 'Lỗi đăng nhập GitHub: ' + error.message;
                     console.error('Lỗi đăng nhập GitHub:', error);
+                    Toastify({
+                        text: 'Lỗi đăng nhập GitHub: ' + error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
                 } else {
                     console.log('Đăng nhập GitHub thành công:', data);
                     await checkUser();
@@ -249,6 +302,14 @@
                 if (error) {
                     document.getElementById('error-message').textContent = 'Lỗi đăng nhập Twitter: ' + error.message;
                     console.error('Lỗi đăng nhập Twitter:', error);
+                    Toastify({
+                        text: 'Lỗi đăng nhập Twitter: ' + error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
                 } else {
                     console.log('Đăng nhập Twitter thành công:', data);
                     await checkUser();
@@ -260,7 +321,14 @@
                 const user = await checkUser();
                 if (user) {
                     console.log('Người dùng đã đăng nhập:', user);
-                    alert('Đã đăng nhập: ' + JSON.stringify(user, null, 2));
+                    Toastify({
+                        text: 'Đã đăng nhập: ' + user.email,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#28a745",
+                    }).showToast();
                 } else {
                     console.log('Chưa có người dùng đăng nhập');
                 }
