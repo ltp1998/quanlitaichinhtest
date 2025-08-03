@@ -66,7 +66,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4">
                                         <div>
-                                            <h5 class="text-primary">Chào mừng!</h5>
+                                            <h5 class="text-primary">Chào mừng1!</h5>
                                             <p class="text-muted">Đăng nhập để truy cập tài chính của bạn</p>
                                         </div>
                                         <div class="mt-4">
@@ -105,7 +105,6 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                            <div id="error-message" class="text-danger mt-3"></div>
                                         </div>
                                         <div class="mt-5 text-center">
                                             <p class="mb-0">Bạn chưa có tài khoản? <a href="auth-signup-cover.html" class="fw-semibold text-primary text-decoration-underline"> Đăng kí</a> </p>
@@ -152,9 +151,20 @@
     <script src="assets/js/pages/password-addon.init.js"></script>
     <script>
         // Khởi tạo Supabase client
-        const supabaseUrl = 'https://ejmfnprjqllamousmrim.supabase.co'; // Thay bằng Project URL của bạn
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'; // Thay bằng anon key
+        const supabaseUrl = 'https://your-project-ref.supabase.co'; // Thay bằng Project URL của bạn
+        const supabaseKey = 'your-anon-key'; // Thay bằng anon key
         const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Hàm kiểm tra trạng thái người dùng
+        async function checkUser() {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error) {
+                console.error('Lỗi kiểm tra người dùng:', error.message);
+                return null;
+            }
+            console.log('Thông tin người dùng:', user);
+            return user;
+        }
 
         // Xử lý đăng nhập bằng email/mật khẩu
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -163,7 +173,10 @@
             const password = document.getElementById('password-input').value;
             const errorMessage = document.getElementById('error-message');
 
-            // Đăng nhập bằng email (giả sử username là email)
+            // Xóa thông báo lỗi cũ
+            errorMessage.textContent = '';
+
+            // Đăng nhập bằng email
             const { data, error } = await supabase.auth.signInWithPassword({
                 email: username,
                 password: password
@@ -171,9 +184,15 @@
 
             if (error) {
                 errorMessage.textContent = 'Lỗi đăng nhập: ' + error.message;
+                console.error('Lỗi đăng nhập:', error);
             } else {
-                alert('Đăng nhập thành công!');
-                window.location.href = '/dashboard.html'; // Thay bằng URL dashboard của bạn
+                console.log('Đăng nhập thành công:', data.user);
+                alert('Đăng nhập thành công! User:', JSON.stringify(data.user, null, 2));
+                // Kiểm tra thông tin người dùng
+                const user = await checkUser();
+                if (user) {
+                    window.location.href = '/dashboard.html'; // Thay bằng URL dashboard của bạn
+                }
             }
         });
 
@@ -184,6 +203,10 @@
             });
             if (error) {
                 document.getElementById('error-message').textContent = 'Lỗi đăng nhập Google: ' + error.message;
+                console.error('Lỗi đăng nhập Google:', error);
+            } else {
+                console.log('Đăng nhập Google thành công:', data);
+                await checkUser();
             }
         }
 
@@ -194,6 +217,10 @@
             });
             if (error) {
                 document.getElementById('error-message').textContent = 'Lỗi đăng nhập Facebook: ' + error.message;
+                console.error('Lỗi đăng nhập Facebook:', error);
+            } else {
+                console.log('Đăng nhập Facebook thành công:', data);
+                await checkUser();
             }
         }
 
@@ -204,6 +231,10 @@
             });
             if (error) {
                 document.getElementById('error-message').textContent = 'Lỗi đăng nhập GitHub: ' + error.message;
+                console.error('Lỗi đăng nhập GitHub:', error);
+            } else {
+                console.log('Đăng nhập GitHub thành công:', data);
+                await checkUser();
             }
         }
 
@@ -214,8 +245,23 @@
             });
             if (error) {
                 document.getElementById('error-message').textContent = 'Lỗi đăng nhập Twitter: ' + error.message;
+                console.error('Lỗi đăng nhập Twitter:', error);
+            } else {
+                console.log('Đăng nhập Twitter thành công:', data);
+                await checkUser();
             }
         }
+
+        // Kiểm tra trạng thái người dùng khi tải trang
+        window.addEventListener('load', async () => {
+            const user = await checkUser();
+            if (user) {
+                console.log('Người dùng đã đăng nhập:', user);
+                alert('Đã đăng nhập: ' + JSON.stringify(user, null, 2));
+            } else {
+                console.log('Chưa có người dùng đăng nhập');
+            }
+        });
     </script>
 </body>
 </html>
