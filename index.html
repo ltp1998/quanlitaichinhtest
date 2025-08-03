@@ -71,7 +71,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4">
                                         <div>
-                                            <h5 class="text-primary">Chào mừng 3!</h5>
+                                            <h5 class="text-primary">Chào mừng 4!</h5>
                                             <p class="text-muted">Đăng nhập để truy cập tài chính của bạn</p>
                                         </div>
                                         <div class="mt-4">
@@ -158,7 +158,7 @@
         // Khởi tạo Supabase client
         const supabaseUrl = 'https://ejmfnprjqllamousmrim.supabase.co'; // Thay bằng Project URL của bạn
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'; // Thay bằng anon key
-        const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Hàm kiểm tra trạng thái người dùng
         async function checkUser() {
