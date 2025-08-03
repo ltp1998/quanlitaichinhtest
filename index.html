@@ -155,7 +155,7 @@
             // Khởi tạo Supabase client
             const supabaseUrl = 'https://ejmfnprjqllamousmrim.supabase.co'; // Thay bằng Project URL
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'; // Thay bằng anon key
-            const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+            const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
             // Hàm kiểm tra trạng thái người dùng
             async function checkUser() {
