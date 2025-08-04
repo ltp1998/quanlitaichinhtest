@@ -99,6 +99,10 @@
                                                     <button class="btn btn-success w-100" type="submit">Đăng nhập</button>
                                                 </div>
                                                 <div id="error-message" class="text-danger mt-3"></div>
+                                                <!-- Hiển thị username sau khi đăng nhập -->
+                                                <div id="user-info" class="mt-3" style="display: none;">
+                                                    <h3>Chào mừng, <span id="username"></span>!</h3>
+                                                </div>
                                                 <div class="mt-4 text-center">
                                                     <div class="signin-other-title">
                                                         <h5 class="fs-13 mb-4 title">Đăng nhập với</h5>
@@ -181,6 +185,33 @@
                 }
                 console.log('Thông tin người dùng:', user);
                 return user;
+            }
+
+            // Hàm tải thông tin username từ public.profiles
+            async function loadUserProfile() {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    const { data, error } = await supabase
+                        .from('profiles')
+                        .select('username')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (error) {
+                        console.error('Lỗi tải thông tin user:', error);
+                        Toastify({
+                            text: 'Lỗi tải thông tin user: ' + error.message,
+                            duration: 5000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#dc3545",
+                        }).showToast();
+                    } else {
+                        usernameSpan.textContent = data.username || 'Chưa có username';
+                        userInfo.style.display = 'block';
+                    }
+                }
             }
 
             // Xử lý đăng nhập bằng email/mật khẩu
