@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Test Kết Nối Supabase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Test Kết Nối Supabase</h2>
+        <div id="result" class="mt-3"></div>
+        <div id="error-message" class="text-danger mt-3"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Khởi tạo Supabase client
+            const supabase = window.supabase.createClient(
+                'https://ejmfnprjqllamousmrim.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'
+            );
+
+            const resultDiv = document.getElementById('result');
+            const errorMessage = document.getElementById('error-message');
+
+            // Hàm tải username trực tiếp
+            async function loadUsername() {
+                try {
+                    const { data, error } = await supabase
+                        .from('profiles')
+                        .select('username')
+                        .eq('email', 'ltphcm04@gmail.com')
+                        .single();
+
+                    if (error) {
+                        errorMessage.textContent = 'Lỗi: ' + error.message;
+                        console.error('Lỗi truy vấn:', error);
+                        Toastify({
+                            text: 'Lỗi kết nối hoặc truy vấn: ' + error.message,
+                            duration: 5000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#dc3545",
+                        }).showToast();
+                    } else {
+                        resultDiv.textContent = `Username của ltphcm04@gmail.com là: ${data.username || 'Chưa có username'}`;
+                        Toastify({
+                            text: 'Kết nối thành công! Đã tải username.',
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#28a745",
+                        }).showToast();
+                    }
+                } catch (err) {
+                    errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
+                    console.error('Lỗi hệ thống:', err);
+                    Toastify({
+                        text: 'Lỗi hệ thống: ' + err.message,
+                        duration: 5000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                }
+            }
+
+            // Gọi hàm khi trang load
+            loadUsername();
+        });
+    </script>
+</body>
+</html>
