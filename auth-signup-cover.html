@@ -1,10 +1,7 @@
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
 
-
-<!-- Mirrored from themesbrand.com/velzon/html/master/auth-signup-cover.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Aug 2024 07:46:59 GMT -->
 <head>
-
     <meta charset="utf-8" />
     <title>Đăng kí</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,11 +20,15 @@
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
-
+    <!-- Toastify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+    <!-- Supabase Client -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <!-- Toastify JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 
 <body>
-
     <!-- auth-page wrapper -->
     <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
         <div class="bg-overlay"></div>
@@ -71,7 +72,6 @@
                                                     </div>
                                                 </div>
                                                 <!-- end carousel -->
-
                                             </div>
                                         </div>
                                     </div>
@@ -80,13 +80,12 @@
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4">
                                         <div>
-                                            <h5 class="text-primary">Register Account</h5>
+                                            <h5 class="text-primary">Register Account 2</h5>
                                             <p class="text-muted">Get your Free Velzon account now.</p>
                                         </div>
 
                                         <div class="mt-4">
-                                            <form class="needs-validation" novalidate action="https://themesbrand.com/velzon/html/master/index.html">
-
+                                            <form class="needs-validation" id="signupForm" novalidate>
                                                 <div class="mb-3">
                                                     <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
                                                     <input type="email" class="form-control" id="useremail" placeholder="Enter email address" required>
@@ -154,7 +153,6 @@
                         <!-- end card -->
                     </div>
                     <!-- end col -->
-
                 </div>
                 <!-- end row -->
             </div>
@@ -192,8 +190,89 @@
     <script src="assets/js/pages/form-validation.init.js"></script>
     <!-- password create init -->
     <script src="assets/js/pages/passowrd-create.init.js"></script>
+
+    <!-- Custom signup script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const supabase = window.supabase.createClient(
+                'https://ejmfnprjqllamousmrim.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'
+            );
+
+            const signupForm = document.getElementById('signupForm');
+            const errorMessage = document.getElementById('error-message');
+
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const email = document.getElementById('useremail').value.trim();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password-input').value.trim();
+
+                // Kiểm tra validation cơ bản
+                if (!email || !username || !password) {
+                    errorMessage.textContent = 'Vui lòng điền đầy đủ thông tin.';
+                    Toastify({
+                        text: 'Vui lòng điền đầy đủ thông tin.',
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                    return;
+                }
+
+                try {
+                    // Đăng ký tài khoản với Supabase
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: {
+                            data: { username }
+                        }
+                    });
+
+                    if (error) {
+                        errorMessage.textContent = 'Lỗi đăng ký: ' + error.message;
+                        console.error('Lỗi đăng ký:', error);
+                        Toastify({
+                            text: 'Lỗi đăng ký: ' + error.message,
+                            duration: 5000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#dc3545",
+                        }).showToast();
+                    } else {
+                        errorMessage.textContent = '';
+                        Toastify({
+                            text: 'Đăng ký thành công! Vui lòng kiểm tra email để xác minh.',
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#28a745",
+                        }).showToast();
+                        setTimeout(() => {
+                            window.location.href = 'index.html'; // Chuyển hướng sau khi đăng ký
+                        }, 3000);
+                    }
+                } catch (err) {
+                    errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
+                    console.error('Lỗi hệ thống:', err);
+                    Toastify({
+                        text: 'Lỗi hệ thống: ' + err.message,
+                        duration: 5000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                }
+            });
+        });
+    </script>
 </body>
 
-
-<!-- Mirrored from themesbrand.com/velzon/html/master/auth-signup-cover.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Aug 2024 07:46:59 GMT -->
 </html>
