@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 4</title>
+    <title>Bảng tổng quan 5</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -4166,40 +4166,45 @@
             const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 
-                // Hàm cập nhật tên và vai trò người dùng
                 async function updateUserInfo() {
-                    const { data: { user } } = await supabase.auth.getUser();
-                    if (user && user.email) {
-                        const { data, error } = await supabase
-                            .from('profiles')
-                            .select('realname, role') // Thay 'role' bằng cột thực tế nếu khác
-                            .eq('email', user.email)
-                            .single();
-        
-                        if (error) {
-                            console.error('Lỗi tải thông tin realname:', error.message);
-                            Toastify({
-                                text: 'Lỗi tải thông tin realname: ' + error.message,
-                                duration: 3000,
-                                close: true,
-                                gravity: "top",
-                                position: "right",
-                                backgroundColor: "#dc3545",
-                            }).showToast();
-                        } else if (data) {
-                            const userNameSpan = document.querySelector('.user-name-text');
-                            const userSubTextSpan = document.querySelector('.user-name-sub-text');
-                            if (userNameSpan && data.realname) {
-                                userNameSpan.textContent = data.realname;
-                            }
-                            if (userSubTextSpan && data.role) {
-                                userSubTextSpan.textContent = data.role; // Thay 'role' bằng cột phù hợp
-                            } else if (userSubTextSpan && !data.role) {
-                                userSubTextSpan.textContent = 'User'; // Giá trị mặc định nếu không có role
-                            }
-                        }
+            const { data: { user } } = await supabase.auth.getUser();
+            console.log('User session:', user);
+            if (user && user.email) {
+                console.log('Querying profile for email:', user.email);
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('realname, role')
+                    .eq('email', user.email)
+                    .single();
+
+                if (error) {
+                    console.error('Lỗi tải thông tin realname:', error.message);
+                    Toastify({
+                        text: 'Lỗi tải thông tin realname: ' + error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                } else if (data) {
+                    console.log('Profile data:', data);
+                    const userNameSpan = document.querySelector('.user-name-text');
+                    const userSubTextSpan = document.querySelector('.user-name-sub-text');
+                    if (userNameSpan && data.realname) {
+                        userNameSpan.textContent = data.realname;
+                        console.log('Updated user name to:', data.realname);
+                    }
+                    if (userSubTextSpan && data.role) {
+                        userSubTextSpan.textContent = data.role;
+                        console.log('Updated user role to:', data.role);
+                    } else if (userSubTextSpan && !data.role) {
+                        userSubTextSpan.textContent = 'User';
+                        console.log('No role, set to default: User');
                     }
                 }
+            }
+        }
             
             // Xử lý logout
             const logoutLink = document.getElementById('logout-link');
