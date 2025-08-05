@@ -224,9 +224,9 @@
                 // Xóa thông báo lỗi cũ
                 errorMessage.textContent = '';
 
-                // Đăng nhập bằng username
+                // Đăng nhập bằng email
                 const { data, error } = await supabase.auth.signInWithPassword({
-                    username: username,
+                    email: username,
                     password: password
                 });
 
@@ -353,7 +353,7 @@
                 if (user) {
                     console.log('Người dùng đã đăng nhập:', user);
                     Toastify({
-                        text: 'Đã đăng nhập: ' + user.username,
+                        text: 'Đã đăng nhập: ' + user.email,
                         duration: 3000,
                         close: true,
                         gravity: "top",
