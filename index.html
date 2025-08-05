@@ -72,7 +72,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4">
                                         <div>
-                                            <h5 class="text-primary">Chào mừng 2!</h5>
+                                            <h5 class="text-primary">Chào mừng 3!</h5>
                                             <p class="text-muted">Đăng nhập để truy cập tài chính của bạn</p>
                                         </div>
                                         <div class="mt-4">
@@ -224,9 +224,9 @@
                 // Xóa thông báo lỗi cũ
                 errorMessage.textContent = '';
 
-                // Đăng nhập bằng email
+                // Đăng nhập bằng username
                 const { data, error } = await supabase.auth.signInWithPassword({
-                    email: username,
+                    username: username,
                     password: password
                 });
 
