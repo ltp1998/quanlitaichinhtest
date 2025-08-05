@@ -72,7 +72,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4">
                                         <div>
-                                            <h5 class="text-primary">Chào mừng 4!</h5>
+                                            <h5 class="text-primary">Chào mừng 5!</h5>
                                             <p class="text-muted">Đăng nhập để truy cập tài chính của bạn</p>
                                         </div>
                                         <div class="mt-4">
@@ -160,211 +160,210 @@
     <script defer src="assets/js/plugins.js"></script>
     <script defer src="assets/js/pages/password-addon.init.js"></script>
     <script>
-        // Đảm bảo Supabase client tải xong trước khi chạy
-        document.addEventListener('DOMContentLoaded', () => {
-            // Khởi tạo Supabase client
-            const supabaseUrl = 'https://ejmfnprjqllamousmrim.supabase.co'; // Thay bằng Project URL
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'; // Thay bằng anon key
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // Đảm bảo Supabase client tải xong trước khi chạy
+    document.addEventListener('DOMContentLoaded', () => {
+        // Khởi tạo Supabase client
+        const supabaseUrl = 'https://ejmfnprjqllamousmrim.supabase.co'; // Thay bằng Project URL
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'; // Thay bằng anon key
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-            // Hàm kiểm tra trạng thái người dùng
-            async function checkUser() {
-                const { data: { user }, error } = await supabase.auth.getUser();
-                if (error) {
-                    console.error('Lỗi kiểm tra người dùng:', error.message);
-                    document.getElementById('error-message').textContent = 'Lỗi kiểm tra người dùng: ' + error.message;
-                    Toastify({
-                        text: 'Lỗi kiểm tra người dùng: ' + error.message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#dc3545",
-                    }).showToast();
-                    return null;
-                }
-                console.log('Thông tin người dùng:', user);
-                return user;
+        // Hàm kiểm tra trạng thái người dùng và chuyển hướng nếu đã đăng nhập
+        async function checkUser() {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error) {
+                console.error('Lỗi kiểm tra người dùng:', error.message);
+                document.getElementById('error-message').textContent = 'Lỗi kiểm tra người dùng: ' + error.message;
+                Toastify({
+                    text: 'Lỗi kiểm tra người dùng: ' + error.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+                return null;
             }
-
-            // Hàm tải thông tin username từ public.profiles
-            async function loadUserProfile() {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (user) {
-                    const { data, error } = await supabase
-                        .from('profiles')
-                        .select('username')
-                        .eq('id', user.id)
-                        .single();
-
-                    if (error) {
-                        console.error('Lỗi tải thông tin user:', error);
-                        Toastify({
-                            text: 'Lỗi tải thông tin user: ' + error.message,
-                            duration: 5000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#dc3545",
-                        }).showToast();
-                    } else {
-                        usernameSpan.textContent = data.username || 'Chưa có username';
-                        userInfo.style.display = 'block';
-                    }
-                }
+            if (user) {
+                console.log('Người dùng đã đăng nhập:', user);
+                Toastify({
+                    text: 'Đã đăng nhập: ' + user.email,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#28a745",
+                }).showToast();
+                window.location.href = '/dashboard.html'; // Chuyển hướng ngay lập tức
+            } else {
+                console.log('Chưa có người dùng đăng nhập');
             }
+            return user;
+        }
 
-            // Xử lý đăng nhập bằng email/mật khẩu
-            document.getElementById('loginForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password-input').value;
-                const errorMessage = document.getElementById('error-message');
-
-                // Xóa thông báo lỗi cũ
-                errorMessage.textContent = '';
-
-                // Đăng nhập bằng email
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: username,
-                    password: password
-                });
+        // Hàm tải thông tin username từ public.profiles
+        async function loadUserProfile() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('username')
+                    .eq('id', user.id)
+                    .single();
 
                 if (error) {
-                    errorMessage.textContent = 'Lỗi đăng nhập: ' + error.message;
-                    console.error('Lỗi đăng nhập:', error);
+                    console.error('Lỗi tải thông tin user:', error);
                     Toastify({
-                        text: 'Lỗi đăng nhập: ' + error.message,
-                        duration: 3000,
+                        text: 'Lỗi tải thông tin user: ' + error.message,
+                        duration: 5000,
                         close: true,
                         gravity: "top",
                         position: "right",
                         backgroundColor: "#dc3545",
                     }).showToast();
                 } else {
-                    console.log('Đăng nhập thành công:', data.user);
-                    Toastify({
-                        text: 'Đăng nhập thành công! Email: ' + data.user.email,
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#28a745",
-                    }).showToast();
-                    // Kiểm tra thông tin người dùng
-                    const user = await checkUser();
-                    if (user) {
-                        href = '/dashboard.html'; // Thay bằng URL dashboard
-                    }
+                    const usernameSpan = document.getElementById('username'); // Đảm bảo có element này
+                    const userInfo = document.getElementById('user-info'); // Đảm bảo có element này
+                    usernameSpan.textContent = data.username || 'Chưa có username';
+                    userInfo.style.display = 'block';
                 }
+            }
+        }
+
+        // Xử lý đăng nhập bằng email/mật khẩu
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password-input').value;
+            const errorMessage = document.getElementById('error-message');
+
+            // Xóa thông báo lỗi cũ
+            errorMessage.textContent = '';
+
+            // Đăng nhập bằng email
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: username,
+                password: password
             });
 
-            // Đăng nhập với Google
-            async function loginWithGoogle() {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google'
-                });
-                if (error) {
-                    document.getElementById('error-message').textContent = 'Lỗi đăng nhập Google: ' + error.message;
-                    console.error('Lỗi đăng nhập Google:', error);
-                    Toastify({
-                        text: 'Lỗi đăng nhập Google: ' + error.message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#dc3545",
-                    }).showToast();
-                } else {
-                    console.log('Đăng nhập Google thành công:', data);
-                    await checkUser();
-                }
+            if (error) {
+                errorMessage.textContent = 'Lỗi đăng nhập: ' + error.message;
+                console.error('Lỗi đăng nhập:', error);
+                Toastify({
+                    text: 'Lỗi đăng nhập: ' + error.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+            } else {
+                console.log('Đăng nhập thành công:', data.user);
+                Toastify({
+                    text: 'Đăng nhập thành công! Email: ' + data.user.email,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#28a745",
+                }).showToast();
+                await checkUser(); // Kiểm tra và chuyển hướng nếu cần
+                await loadUserProfile(); // Tải thông tin user
             }
-
-            // Đăng nhập với Facebook
-            async function loginWithFacebook() {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'facebook'
-                });
-                if (error) {
-                    document.getElementById('error-message').textContent = 'Lỗi đăng nhập Facebook: ' + error.message;
-                    console.error('Lỗi đăng nhập Facebook:', error);
-                    Toastify({
-                        text: 'Lỗi đăng nhập Facebook: ' + error.message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#dc3545",
-                    }).showToast();
-                } else {
-                    console.log('Đăng nhập Facebook thành công:', data);
-                    await checkUser();
-                }
-            }
-
-            // Đăng nhập với GitHub
-            async function loginWithGithub() {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'github'
-                });
-                if (error) {
-                    document.getElementById('error-message').textContent = 'Lỗi đăng nhập GitHub: ' + error.message;
-                    console.error('Lỗi đăng nhập GitHub:', error);
-                    Toastify({
-                        text: 'Lỗi đăng nhập GitHub: ' + error.message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#dc3545",
-                    }).showToast();
-                } else {
-                    console.log('Đăng nhập GitHub thành công:', data);
-                    await checkUser();
-                }
-            }
-
-            // Đăng nhập với Twitter
-            async function loginWithTwitter() {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'twitter'
-                });
-                if (error) {
-                    document.getElementById('error-message').textContent = 'Lỗi đăng nhập Twitter: ' + error.message;
-                    console.error('Lỗi đăng nhập Twitter:', error);
-                    Toastify({
-                        text: 'Lỗi đăng nhập Twitter: ' + error.message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#dc3545",
-                    }).showToast();
-                } else {
-                    console.log('Đăng nhập Twitter thành công:', data);
-                    await checkUser();
-                }
-            }
-
-            // Kiểm tra trạng thái người dùng khi tải trang
-            window.addEventListener('load', async () => {
-                const user = await checkUser();
-                if (user) {
-                    console.log('Người dùng đã đăng nhập:', user);
-                    Toastify({
-                        text: 'Đã đăng nhập: ' + user.email,
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#28a745",
-                    }).showToast();
-                } else {
-                    console.log('Chưa có người dùng đăng nhập');
-                }
-            });
         });
-    </script>
+
+        // Đăng nhập với Google
+        async function loginWithGoogle() {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google'
+            });
+            if (error) {
+                document.getElementById('error-message').textContent = 'Lỗi đăng nhập Google: ' + error.message;
+                console.error('Lỗi đăng nhập Google:', error);
+                Toastify({
+                    text: 'Lỗi đăng nhập Google: ' + error.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+            } else {
+                console.log('Đăng nhập Google thành công:', data);
+                await checkUser();
+            }
+        }
+
+        // Đăng nhập với Facebook
+        async function loginWithFacebook() {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'facebook'
+            });
+            if (error) {
+                document.getElementById('error-message').textContent = 'Lỗi đăng nhập Facebook: ' + error.message;
+                console.error('Lỗi đăng nhập Facebook:', error);
+                Toastify({
+                    text: 'Lỗi đăng nhập Facebook: ' + error.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+            } else {
+                console.log('Đăng nhập Facebook thành công:', data);
+                await checkUser();
+            }
+        }
+
+        // Đăng nhập với GitHub
+        async function loginWithGithub() {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'github'
+            });
+            if (error) {
+                document.getElementById('error-message').textContent = 'Lỗi đăng nhập GitHub: ' + error.message;
+                console.error('Lỗi đăng nhập GitHub:', error);
+                Toastify({
+                    text: 'Lỗi đăng nhập GitHub: ' + error.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+            } else {
+                console.log('Đăng nhập GitHub thành công:', data);
+                await checkUser();
+            }
+        }
+
+        // Đăng nhập với Twitter
+        async function loginWithTwitter() {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'twitter'
+            });
+            if (error) {
+                document.getElementById('error-message').textContent = 'Lỗi đăng nhập Twitter: ' + error.message;
+                console.error('Lỗi đăng nhập Twitter:', error);
+                Toastify({
+                    text: 'Lỗi đăng nhập Twitter: ' + error.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+            } else {
+                console.log('Đăng nhập Twitter thành công:', data);
+                await checkUser();
+            }
+        }
+
+        // Kiểm tra trạng thái người dùng khi tải trang
+        window.addEventListener('load', async () => {
+            await checkUser(); // Kiểm tra và chuyển hướng nếu đã đăng nhập
+        });
+    });
+</script>
 </body>
 </html>
