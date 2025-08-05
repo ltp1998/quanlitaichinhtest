@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 2</title>
+    <title>Bảng tổng quan 3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -4157,6 +4157,7 @@
     <script src="assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
     <script src="assets/js/plugins.js"></script>
 
+    
     <!-- Logout Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -4164,6 +4165,36 @@
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA';
             const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+
+            // Hàm kiểm tra và cập nhật tên người dùng
+            async function updateUserName() {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user && user.email) {
+                    const { data, error } = await supabase
+                        .from('profiles')
+                        .select('realname')
+                        .eq('email', user.email)
+                        .single();
+
+                    if (error) {
+                        console.error('Lỗi tải thông tin realname:', error.message);
+                        Toastify({
+                            text: 'Lỗi tải thông tin realname: ' + error.message,
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#dc3545",
+                        }).showToast();
+                    } else if (data && data.realname) {
+                        const userNameSpan = document.querySelector('.user-name-text');
+                        if (userNameSpan) {
+                            userNameSpan.textContent = data.realname;
+                        }
+                    }
+                }
+            }
+            
             // Xử lý logout
             const logoutLink = document.getElementById('logout-link');
             logoutLink.addEventListener('click', async (e) => {
