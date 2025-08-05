@@ -737,7 +737,7 @@
                         <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
                         <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
                         <a class="dropdown-item" href="auth-lockscreen-basic.html"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
-                        <a class="dropdown-item" href="auth-logout-basic.html"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
+                        <a class="dropdown-item" href="auth-logout-basic.html" id="logout-link"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
                     </div>
                 </div>
             </div>
@@ -4150,6 +4150,77 @@
     <script src="assets/libs/feather-icons/feather.min.js"></script>
     <script src="assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
     <script src="assets/js/plugins.js"></script>
+
+    <!-- Logout Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const supabaseUrl = 'https://ejmfnprjqllamousmrim.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA';
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+            // Xử lý logout
+            const logoutLink = document.getElementById('logout-link');
+            logoutLink.addEventListener('click', async (e) => {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+                try {
+                    const { error } = await supabase.auth.signOut();
+                    if (error) {
+                        console.error('Lỗi đăng xuất:', error.message);
+                        Toastify({
+                            text: 'Lỗi đăng xuất: ' + error.message,
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#dc3545",
+                        }).showToast();
+                    } else {
+                        console.log('Đăng xuất thành công');
+                        Toastify({
+                            text: 'Đăng xuất thành công! Chuyển hướng...',
+                            duration: 2000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#28a745",
+                        }).showToast();
+                        setTimeout(() => {
+                            window.location.href = 'quanlitaichinhtest/index.html'; // Chuyển hướng về trang đăng nhập
+                        }, 2000);
+                    }
+                } catch (err) {
+                    console.error('Lỗi hệ thống:', err.message);
+                    Toastify({
+                        text: 'Lỗi hệ thống: ' + err.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                }
+            });
+
+            // Kiểm tra trạng thái đăng nhập khi tải trang (tùy chọn)
+            window.addEventListener('load', async () => {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) {
+                    console.log('Chưa đăng nhập, chuyển hướng về index.html');
+                    Toastify({
+                        text: 'Vui lòng đăng nhập để tiếp tục!',
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 3000);
+                }
+            });
+        });
+    </script>
 
     <!-- apexcharts -->
     <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
