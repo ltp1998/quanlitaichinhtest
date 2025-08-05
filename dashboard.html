@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 3</title>
+    <title>Bảng tổng quan 4</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -743,7 +743,7 @@
                         <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
                         <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
                         <a class="dropdown-item" href="auth-lockscreen-basic.html"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
-                        <a class="dropdown-item" href="auth-logout-basic.html" id="logout-link"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
+                        <a class="dropdown-item" href="#" id="logout-link"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
                     </div>
                 </div>
             </div>
@@ -4166,34 +4166,40 @@
             const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 
-            // Hàm kiểm tra và cập nhật tên người dùng
-            async function updateUserName() {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (user && user.email) {
-                    const { data, error } = await supabase
-                        .from('profiles')
-                        .select('realname')
-                        .eq('email', user.email)
-                        .single();
-
-                    if (error) {
-                        console.error('Lỗi tải thông tin realname:', error.message);
-                        Toastify({
-                            text: 'Lỗi tải thông tin realname: ' + error.message,
-                            duration: 3000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#dc3545",
-                        }).showToast();
-                    } else if (data && data.realname) {
-                        const userNameSpan = document.querySelector('.user-name-text');
-                        if (userNameSpan) {
-                            userNameSpan.textContent = data.realname;
+                // Hàm cập nhật tên và vai trò người dùng
+                async function updateUserInfo() {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (user && user.email) {
+                        const { data, error } = await supabase
+                            .from('profiles')
+                            .select('realname, role') // Thay 'role' bằng cột thực tế nếu khác
+                            .eq('email', user.email)
+                            .single();
+        
+                        if (error) {
+                            console.error('Lỗi tải thông tin realname:', error.message);
+                            Toastify({
+                                text: 'Lỗi tải thông tin realname: ' + error.message,
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545",
+                            }).showToast();
+                        } else if (data) {
+                            const userNameSpan = document.querySelector('.user-name-text');
+                            const userSubTextSpan = document.querySelector('.user-name-sub-text');
+                            if (userNameSpan && data.realname) {
+                                userNameSpan.textContent = data.realname;
+                            }
+                            if (userSubTextSpan && data.role) {
+                                userSubTextSpan.textContent = data.role; // Thay 'role' bằng cột phù hợp
+                            } else if (userSubTextSpan && !data.role) {
+                                userSubTextSpan.textContent = 'User'; // Giá trị mặc định nếu không có role
+                            }
                         }
                     }
                 }
-            }
             
             // Xử lý logout
             const logoutLink = document.getElementById('logout-link');
