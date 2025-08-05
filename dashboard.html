@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 6</title>
+    <title>Bảng tổng quan 7</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -4172,8 +4172,8 @@
             if (user && user.email) {
                 console.log('Querying profile for email:', user.email);
                 const { data, error } = await supabase
-                    .from('profiles')
-                    .select('realname, role')
+                    .from('users')
+                    .select('id, role')
                     .eq('email', 'ltpspk111@gmail.com')
                     .single();
 
