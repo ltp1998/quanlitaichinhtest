@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 17</title>
+    <title>Bảng tổng quan 18</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -4245,7 +4245,7 @@
                 try {
                     const { data, error } = await supabase
                         .from('profiles')
-                        .select('id')
+                        .select('realname')
                         .eq('email', 'ltpspk111@gmail.com') 
                         .single();
 
@@ -4261,7 +4261,7 @@
                             backgroundColor: "#dc3545",
                         }).showToast();
                     } else {
-                        resultDiv.textContent = `id là: ${data.id || 'Chưa có id'}`;
+                        resultDiv.textContent = `Tên bạn là: ${data.realname || 'Chưa có id'}`;
                         Toastify({
                             text: 'Kết nối thành công! Đã tải id.',
                             duration: 3000,
