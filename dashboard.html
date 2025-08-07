@@ -4166,52 +4166,6 @@
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA';
             const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-
-            // Hàm tải username trực tiếp
-            async function loadUsername() {
-                try {
-                    const { data, error } = await supabase
-                        .from('profiles')
-                        .select('id')
-                        .eq('email', 'ltpspk111@gmail.com') 
-                        .single();
-
-                    if (error) {
-                        errorMessage.textContent = 'Lỗi: ' + error.message;
-                        console.error('Lỗi truy vấn:', error);
-                        Toastify({
-                            text: 'Lỗi kết nối hoặc truy vấn: ' + error.message,
-                            duration: 5000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#dc3545",
-                        }).showToast();
-                    } else {
-                        resultDiv.textContent = `id của ltphcm04@gmail.com là: ${data.id || 'Chưa có id'}`;
-                        Toastify({
-                            text: 'Kết nối thành công! Đã tải id.',
-                            duration: 3000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#28a745",
-                        }).showToast();
-                    }
-                } catch (err) {
-                    errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
-                    console.error('Lỗi hệ thống:', err);
-                    Toastify({
-                        text: 'Lỗi hệ thống: ' + err.message,
-                        duration: 5000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#dc3545",
-                    }).showToast();
-                }
-            }
-            
             // Xử lý logout
             const logoutLink = document.getElementById('logout-link');
             logoutLink.addEventListener('click', async (e) => {
