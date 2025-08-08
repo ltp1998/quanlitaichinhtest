@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 22</title>
+    <title>Bảng tổng quan 23</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -1897,7 +1897,7 @@
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
-                                                <h4 id="result2" class="fs-16 mb-1">Xin chào, Peter</h4>
+                                                <h4 id="result3" class="fs-16 mb-1">Xin chào, Peter</h4>
                                             </div>
                                             <div class="mt-3 mt-lg-0">
                                                 <form action="javascript:void(0);">
@@ -4237,6 +4237,7 @@
             );
 
             const resultDiv = document.getElementById('result2');
+            const resultDiv = document.getElementById('result3');
             const errorMessage = document.getElementById('error-message');
 
             // Hàm tải username trực tiếp
@@ -4260,7 +4261,7 @@
                             backgroundColor: "#dc3545",
                         }).showToast();
                     } else {
-                        resultDiv.textContent = `Xin chào, ${data.realname || 'Chưa có tên'}`;
+                        resultDiv.textContent = `${data.realname || 'Chưa có tên'}`;
                     }
                 } catch (err) {
                     errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
