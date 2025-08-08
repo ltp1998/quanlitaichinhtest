@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 19</title>
+    <title>Bảng tổng quan 20</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -4261,15 +4261,7 @@
                             backgroundColor: "#dc3545",
                         }).showToast();
                     } else {
-                        resultDiv.textContent = `Tên bạn là: ${data.realname || 'Chưa có id'}`;
-                        Toastify({
-                            text: 'Kết nối thành công! Đã tải id.',
-                            duration: 3000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#28a745",
-                        }).showToast();
+                        resultDiv.textContent = `Xin chào, ${data.realname || 'Chưa có tên'}`;
                     }
                 } catch (err) {
                     errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
