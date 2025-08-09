@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 29</title>
+    <title>Bảng tổng quan 30</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="LTPSPK - Quản lý tài chính" name="description" />
     <!-- App favicon -->
@@ -4226,60 +4226,71 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Khởi tạo Supabase client
-            const supabase = window.supabase.createClient(
-                'https://ejmfnprjqllamousmrim.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'
-            );
+    <<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Khởi tạo Supabase client
+        const supabase = window.supabase.createClient(
+            'https://ejmfnprjqllamousmrim.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'
+        );
 
-            const resultDiv = document.getElementById('result2');
-            const resultName = document.getElementById('result3');
-            const errorMessage = document.getElementById('error-message');
+        const resultDiv = document.getElementById('result2');
+        const resultName = document.getElementById('result3');
+        const errorMessage = document.getElementById('error-message');
 
-            // Hàm tải username trực tiếp
-            async function loadUsername() {
-                try {
-                    const { data, error } = await supabase
-                        .from('profiles')
-                        .select('realname')
-                        .eq('email', 'ltpspk111@gmail.com') 
-                        .single();
+        // Hàm tải username trực tiếp
+        async function loadUsername() {
+            try {
+                // Lấy email từ người dùng đã đăng nhập
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user || !user.email) {
+                    throw new Error('Không tìm thấy thông tin người dùng đã đăng nhập');
+                }
 
-                    if (error) {
-                        errorMessage.textContent = 'Lỗi: ' + error.message;
-                        console.error('Lỗi truy vấn:', error);
-                        Toastify({
-                            text: 'Lỗi kết nối hoặc truy vấn: ' + error.message,
-                            duration: 5000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#dc3545",
-                        }).showToast();
-                    } else {
-                        resultDiv.textContent = `${data.realname || 'Chưa có tên'}`;
-                    } 
-                } catch (err) {
-                    errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
-                    console.error('Lỗi hệ thống:', err);
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('realname')
+                    .eq('email', user.email)
+                    .single();
+
+                if (error) {
+                    errorMessage.textContent = 'Lỗi: ' + error.message;
+                    console.error('Lỗi truy vấn:', error);
                     Toastify({
-                        text: 'Lỗi hệ thống: ' + err.message,
+                        text: 'Lỗi kết nối hoặc truy vấn: ' + error.message,
                         duration: 5000,
                         close: true,
                         gravity: "top",
                         position: "right",
                         backgroundColor: "#dc3545",
                     }).showToast();
+                } else {
+                    const realname = data.realname || 'Chưa có tên';
+                    if (resultDiv) {
+                        resultDiv.textContent = realname;
+                    }
+                    if (resultName) {
+                        resultName.textContent = realname; // Hiển thị cùng giá trị ở result3
+                    }
                 }
+            } catch (err) {
+                errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
+                console.error('Lỗi hệ thống:', err);
+                Toastify({
+                    text: 'Lỗi hệ thống: ' + err.message,
+                    duration: 5000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
             }
+        }
 
-            // Gọi hàm khi trang load
-            loadUsername();
-        });
-    </script>
-
+        // Gọi hàm khi trang load
+        loadUsername();
+    });
+</script>
     <!-- apexcharts -->
     <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
 
