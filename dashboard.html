@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 33</title>
+    <title>Bảng tổng quan 34</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="LTPSPK - Quản lý tài chính" name="description" />
     <!-- App favicon -->
@@ -452,7 +452,7 @@
                 </div>
 
                 <div class="ms-1 header-item d-none d-sm-flex">
-                    <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
+                    <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode" id="theme-toggle">
                         <i class='bx bx-moon fs-22'></i>
                     </button>
                 </div>
@@ -4231,75 +4231,106 @@
     </script>
 
     <<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Khởi tạo Supabase client
-        const supabase = window.supabase.createClient(
-            'https://ejmfnprjqllamousmrim.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'
-        );
-
-        const resultDiv = document.getElementById('result2');
-        const resultName = document.getElementById('result3');
-        const resultNgheNghiep = document.getElementById('NgheNghiep');
-        const errorMessage = document.getElementById('error-message');
-
-        // Hàm tải username trực tiếp
-        async function loadUsername() {
-            try {
-                // Lấy email từ người dùng đã đăng nhập
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user || !user.email) {
-                    throw new Error('Không tìm thấy thông tin người dùng đã đăng nhập');
+            document.addEventListener('DOMContentLoaded', async () => {
+                // Khởi tạo Supabase client
+                const supabase = window.supabase.createClient(
+                    'https://ejmfnprjqllamousmrim.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbWZucHJqcWxsYW1vdXNtcmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMjU3ODUsImV4cCI6MjA2OTcwMTc4NX0.KX0Vd7c9SQhlkdxiMeET0XrI31n-PhMSU-fjxiGckSA'
+                );
+        
+                const resultDiv = document.getElementById('result2');
+                const resultName = document.getElementById('result3');
+                const resultNgheNghiep = document.getElementById('NgheNghiep');
+                const errorMessage = document.getElementById('error-message');
+        
+                // Hàm tải username trực tiếp
+                async function loadUsername() {
+                    try {
+                        // Lấy email từ người dùng đã đăng nhập
+                        const { data: { user } } = await supabase.auth.getUser();
+                        if (!user || !user.email) {
+                            throw new Error('Không tìm thấy thông tin người dùng đã đăng nhập');
+                        }
+        
+                        const { data, error } = await supabase
+                            .from('profiles')
+                            .select('realname, nghenghiep')
+                            .eq('email', user.email)
+                            .single();
+        
+                        if (error) {
+                            errorMessage.textContent = 'Lỗi: ' + error.message;
+                            console.error('Lỗi truy vấn:', error);
+                            Toastify({
+                                text: 'Lỗi kết nối hoặc truy vấn: ' + error.message,
+                                duration: 5000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545",
+                            }).showToast();
+                        } else {
+                            const realname = data.realname || 'Chưa có tên';
+                            const nghenghiep = data.nghenghiep || 'Chưa có nghề nghiệp';
+                            if (resultDiv) {
+                                resultDiv.textContent = realname;
+                            }
+                            if (resultName) {
+                                resultName.textContent = `Xin chào, ${realname}`;
+                            }
+                            if (resultNgheNghiep) {
+                                resultNgheNghiep.textContent = nghenghiep; 
+                            }
+                        }
+                    } catch (err) {
+                        errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
+                        console.error('Lỗi hệ thống:', err);
+                        Toastify({
+                            text: 'Lỗi hệ thống: ' + err.message,
+                            duration: 5000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#dc3545",
+                        }).showToast();
+                    }
                 }
+        
+                // Gọi hàm khi trang load
+                loadUsername();
+            });
+        </script>
 
-                const { data, error } = await supabase
-                    .from('profiles')
-                    .select('realname, nghenghiep')
-                    .eq('email', user.email)
-                    .single();
-
-                if (error) {
-                    errorMessage.textContent = 'Lỗi: ' + error.message;
-                    console.error('Lỗi truy vấn:', error);
-                    Toastify({
-                        text: 'Lỗi kết nối hoặc truy vấn: ' + error.message,
-                        duration: 5000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "#dc3545",
-                    }).showToast();
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const themeToggle = document.getElementById('theme-toggle');
+                const body = document.body;
+        
+                function setTheme(isDark) {
+                    if (isDark) {
+                        body.classList.add('dark-mode');
+                        body.classList.remove('light-mode');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        body.classList.add('light-mode');
+                        body.classList.remove('dark-mode');
+                        localStorage.setItem('theme', 'light');
+                    }
+                }
+        
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') {
+                    setTheme(false);
                 } else {
-                    const realname = data.realname || 'Chưa có tên';
-                    const nghenghiep = data.nghenghiep || 'Chưa có nghề nghiệp';
-                    if (resultDiv) {
-                        resultDiv.textContent = realname;
-                    }
-                    if (resultName) {
-                        resultName.textContent = `Xin chào, ${realname}`;
-                    }
-                    if (resultNgheNghiep) {
-                        resultNgheNghiep.textContent = nghenghiep; 
-                    }
+                    setTheme(true); // Mặc định Dark
                 }
-            } catch (err) {
-                errorMessage.textContent = 'Lỗi hệ thống: ' + err.message;
-                console.error('Lỗi hệ thống:', err);
-                Toastify({
-                    text: 'Lỗi hệ thống: ' + err.message,
-                    duration: 5000,
-                    close: true,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "#dc3545",
-                }).showToast();
-            }
-        }
-
-        // Gọi hàm khi trang load
-        loadUsername();
-    });
-</script>
+        
+                themeToggle.addEventListener('click', () => {
+                    const isDark = body.classList.contains('dark-mode');
+                    setTheme(!isDark);
+                });
+            });
+        </script>
     <!-- apexcharts -->
     <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
 
