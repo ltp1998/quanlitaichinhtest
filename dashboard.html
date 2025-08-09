@@ -4250,7 +4250,7 @@
 
                 const { data, error } = await supabase
                     .from('profiles')
-                    .select('realname')
+                    .select('realname, nghenghiep')
                     .eq('email', user.email)
                     .single();
 
