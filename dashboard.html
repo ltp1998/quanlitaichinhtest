@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Bảng tổng quan 30</title>
+    <title>Bảng tổng quan 31</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="LTPSPK - Quản lý tài chính" name="description" />
     <!-- App favicon -->
@@ -726,8 +726,8 @@
                         <span class="d-flex align-items-center">
                             <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span  id="result2" class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Đang tải...</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">CEO</span>
+                                <span id="result2" class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Đang tải...</span>
+                                <span id="NgheNghiep" class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Đang tải</span>
                             </span>
                         </span>
                     </button>
@@ -4236,6 +4236,7 @@
 
         const resultDiv = document.getElementById('result2');
         const resultName = document.getElementById('result3');
+        const resultNgheNghiep = document.getElementById('NgheNghiep');
         const errorMessage = document.getElementById('error-message');
 
         // Hàm tải username trực tiếp
@@ -4266,11 +4267,15 @@
                     }).showToast();
                 } else {
                     const realname = data.realname || 'Chưa có tên';
+                    const nghenghiep = data.nghenghiep || 'Chưa có nghề nghiệp';
                     if (resultDiv) {
                         resultDiv.textContent = realname;
                     }
                     if (resultName) {
                         resultName.textContent = `Xin chào, ${realname}`;
+                    }
+                    if (resultNgheNghiep) {
+                        resultNgheNghiep.textContent = nghenghiep; 
                     }
                 }
             } catch (err) {
