@@ -1,15 +1,14 @@
 <!doctype html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
+<html lang="vn" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
 
 
 <!-- Mirrored from themesbrand.com/velzon/html/master/dashboard-crm.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Aug 2024 07:46:02 GMT -->
 <head>
 
     <meta charset="utf-8" />
-    <title>Thu chi 2</title>
+    <title>Thu chi 3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
+    <meta content="LTPSPK - Quản lý tài chính" name="description" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
@@ -171,10 +170,16 @@
 
                 <div class="dropdown ms-1 topbar-head-dropdown header-item">
                     <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img id="header-lang-img" src="assets/images/flags/us.svg" alt="Header Language" height="20" class="rounded">
+                        <img id="header-lang-img" src="assets/images/flags/vn.png" alt="Header Language" height="20" class="rounded">
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
 
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item language py-2" data-lang="en" title="Vietnam">
+                            <img src="assets/images/flags/vn.png" alt="user-image" class="me-2 rounded" height="18">
+                            <span class="align-middle">Việt Nam</span>
+                        </a>
+                        
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
                             <img src="assets/images/flags/us.svg" alt="user-image" class="me-2 rounded" height="18">
@@ -1975,21 +1980,13 @@
                         <div class="col-xxl-3 col-md-6">
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Sales Forecast</h4>
+                                    <h4 class="card-title mb-0 flex-grow-1">Hạng mục cha</h4>
                                     <div>
-                                                    <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">
-                                                        ALL
-                                                    </button>
-                                                    <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">
-                                                        1M
-                                                    </button>
-                                                    <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">
-                                                        6M
-                                                    </button>
-                                                    <button type="button" class="btn btn-soft-primary material-shadow-none btn-sm">
-                                                        1Y
-                                                    </button>
-                                                </div>
+                                        <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">Trọn đời</button>
+                                        <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">Năm</button>
+                                        <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">Quý</button>
+                                        <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">Tháng</button>
+                                    </div>
                              <!-- <div class="flex-shrink-0">
                                         <div class="dropdown card-header-dropdown">
                                             <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -2002,10 +1999,11 @@
                                                 <a class="dropdown-item" href="#">Jan 2022</a>
                                             </div>
                                         </div>
+                                     id="sales-forecast-chart"
                                     </div> -->
                                 </div><!-- end card header -->
                                 <div class="card-body pb-0">
-                                    <div id="sales-forecast-chart" data-colors='["--vz-primary", "--vz-success", "--vz-warning"]' data-colors-minimal='["--vz-primary-rgb, 0.75", "--vz-primary", "--vz-primary-rgb, 0.55"]' data-colors-creative='["--vz-primary", "--vz-secondary", "--vz-info"]' data-colors-corporate='["--vz-primary", "--vz-success", "--vz-secondary"]' data-colors-galaxy='["--vz-primary", "--vz-secondary", "--vz-info"]' data-colors-classic='["--vz-primary", "--vz-warning", "--vz-secondary"]' class="apex-charts" dir="ltr"></div>
+                                    <div id="hangmuccha" data-colors='["--vz-primary", "--vz-success", "--vz-warning"]' data-colors-minimal='["--vz-primary-rgb, 0.75", "--vz-primary", "--vz-primary-rgb, 0.55"]' data-colors-creative='["--vz-primary", "--vz-secondary", "--vz-info"]' data-colors-corporate='["--vz-primary", "--vz-success", "--vz-secondary"]' data-colors-galaxy='["--vz-primary", "--vz-secondary", "--vz-info"]' data-colors-classic='["--vz-primary", "--vz-warning", "--vz-secondary"]' class="apex-charts" dir="ltr"></div>
                                 </div>
                             </div><!-- end card -->
                         </div><!-- end col -->
