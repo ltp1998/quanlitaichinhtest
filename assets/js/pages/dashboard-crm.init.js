@@ -23,8 +23,8 @@
         // Lấy dữ liệu từ bảng chitieu
         const { data, error } = await supabase
             .from('chitieu')
-            .select('HangMucCha, SoTienChi')
-            .order('HangMucCha', { ascending: true }); // Sắp xếp theo HangMucCha
+            .select('hangmuccha, sotienchi')
+            .order('hangmuccha', { ascending: true }); // Sắp xếp theo HangMucCha
 
         if (error) {
             console.error('Lỗi khi lấy dữ liệu:', error);
@@ -32,11 +32,11 @@
         }
 
         // Chuẩn bị dữ liệu cho biểu đồ
-        const categories = [...new Set(data.map(item => item.HangMucCha))]; // Loại bỏ trùng lặp HangMucCha
+        const categories = [...new Set(data.map(item => item.hangmuccha))]; // Loại bỏ trùng lặp HangMucCha
         const seriesData = categories.map(category => {
             const total = data
-                .filter(item => item.HangMucCha === category)
-                .reduce((sum, item) => sum + (item.SoTienChi || 0), 0);
+                .filter(item => item.hangmuccha === category)
+                .reduce((sum, item) => sum + (item.sotienchi || 0), 0);
             return total;
         });
 
