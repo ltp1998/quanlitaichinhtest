@@ -22,7 +22,7 @@ async function loadCharts() {
     // Lấy dữ liệu từ bảng thuchi cho sales-forecast-chart
     const { data, error } = await supabase
         .from('thuchi')
-        .select('SoTienThu, SoTienChi');
+        .select('sotienthu, sotienchi');
 
     let goalData = [37]; // Giá trị mặc định hoặc tính toán
     let pendingData = [0];
@@ -32,10 +32,10 @@ async function loadCharts() {
         console.warn('Lỗi lấy dữ liệu từ thuchi:', error.message);
     } else if (data && data.length > 0) {
         // Tính tổng SoTienChi cho Pending Forecast
-        pendingData = [data.reduce((sum, item) => sum + (item.SoTienChi || 0), 0)];
+        pendingData = [data.reduce((sum, item) => sum + (item.sotienchi || 0), 0)];
 
         // Tính tổng SoTienThu cho Revenue
-        revenueData = [data.reduce((sum, item) => sum + (item.SoTienThu || 0), 0)];
+        revenueData = [data.reduce((sum, item) => sum + (item.sotienthu || 0), 0)];
 
         // Goal có thể là tổng SoTienThu + SoTienChi
         goalData = [revenueData[0] + pendingData[0]];
